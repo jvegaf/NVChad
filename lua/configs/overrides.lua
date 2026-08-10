@@ -5,8 +5,8 @@ M.treesitter = {
   ensure_installed = {
     "javascript",
     "json",
-    "jsonc",
     "lua",
+    "java",
     "markdown",
     "python",
     "toml",
@@ -24,47 +24,47 @@ M.treesitter = {
   },
 }
 
-M.mason = {
-  ensure_installed = {
-    -- lua stuff
-    "lua-language-server",
-    "stylua",
-
-    -- web dev stuff
-    "css-lsp",
-    "html-lsp",
-    "typescript-language-server",
-    "eslint-lsp",
-    "prettier",
-
-    -- c/cpp stuff
-    "clangd",
-    "clang-format",
-
-    --java
-    "jdtls",
-    "lemminx",
-
-    --python
-    "pyright",
-    "ruff-lsp",
-    "ruff",
-
-    "stylelint-lsp",
-    "jsonlint",
-    "json-lsp",
-    "hadolint",
-    "shellcheck",
-
-    "js-debug-adapter",
-    "java-debug-adapter",
-    "java-test",
-    "checkstyle",
-
-    "codelldb",
-    "rust-analyzer",
-  },
-}
+-- M.mason = {
+--   ensure_installed = {
+--     -- lua stuff
+--     "lua-language-server",
+--     "stylua",
+--
+--     -- web dev stuff
+--     "css-lsp",
+--     "html-lsp",
+--     "typescript-language-server",
+--     "eslint-lsp",
+--     "prettier",
+--
+--     -- c/cpp stuff
+--     "clangd",
+--     "clang-format",
+--
+--     --java
+--     "jdtls",
+--     "lemminx",
+--
+--     --python
+--     "pyright",
+--     "ruff-lsp",
+--     "ruff",
+--
+--     "stylelint-lsp",
+--     "jsonlint",
+--     "json-lsp",
+--     "hadolint",
+--     "shellcheck",
+--
+--     "js-debug-adapter",
+--     "java-debug-adapter",
+--     "java-test",
+--     "checkstyle",
+--
+--     "codelldb",
+--     "rust-analyzer",
+--   },
+-- }
 
 local api = require "nvim-tree.api"
 api.events.subscribe(api.events.Event.FileCreated, function(file)
@@ -176,7 +176,7 @@ M.cmp = {
     { name = "nvim_lsp", group_index = 2 },
     { name = "copilot", group_index = 2 },
     { name = "luasnip", group_index = 2 },
-    { name = "crates", group_index = 2 },
+    -- { name = "crates", group_index = 2 },
     { name = "buffer", group_index = 2 },
     { name = "nvim_lua", group_index = 2 },
     { name = "emoji", group_index = 2 },

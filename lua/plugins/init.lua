@@ -8,12 +8,12 @@ return {
   },
 
   -- These are some examples, uncomment them if you want to see them work!
-  -- {
-  --   "neovim/nvim-lspconfig",
-  --   config = function()
-  --     require "configs.lspconfig"
-  --   end,
-  -- },
+  {
+    "neovim/nvim-lspconfig",
+    config = function()
+      require "configs.lspconfig"
+    end,
+  },
 
   -- test new blink
   -- { import = "nvchad.blink.lazyspec" },
@@ -27,43 +27,53 @@ return {
   -- 		},
   -- 	},
   -- },
-  {
-    "mfussenegger/nvim-lint",
-    event = "VeryLazy",
-    config = function()
-      require "configs.nvim-lint"
-    end,
-  },
-  {
-    "neovim/nvim-lspconfig",
-    dependencies = {
-      "hrsh7th/cmp-nvim-lsp",
-    },
-    config = function()
-      -- require "plugins.configs.lspconfig"
-      require "configs.lspconfig"
-    end, -- Override to setup mason-lspconfig
-  },
-  -- jdtls
   -- {
-  --   "mfussenegger/nvim-jdtls",
-  --   ft = { "java" },
-  --   dependencies = { "williamboman/mason-lspconfig.nvim" },
+  --   "mfussenegger/nvim-lint",
+  --   event = "VeryLazy",
   --   config = function()
-  --     require "configs.jdtls"
+  --     require "configs.nvim-lint"
   --   end,
   -- },
   -- {
-  --   "simaxme/java.nvim",
-  --   ft = { "java" },
+  --   "neovim/nvim-lspconfig",
+  --   dependencies = {
+  --     "hrsh7th/cmp-nvim-lsp",
+  --   },
+  --   config = function()
+  --     -- require "plugins.configs.lspconfig"
+  --     require "configs.lspconfig"
+  --   end, -- Override to setup mason-lspconfig
   -- },
-
-  -- override plugin configs
+  -- jdtls
   {
-    "williamboman/mason.nvim",
-    opts = overrides.mason,
+    "mfussenegger/nvim-jdtls",
+    ft = { "java" },
+    deendencies = {
+      "neovim/nvim-lspconfig",
+      opts = {
+        setup = {
+          -- disable jdtls config from lspconfig
+          jdtls = function()
+            return true
+          end,
+        },
+      },
+    },
+    config = function()
+      require "configs.jdtls"
+    end,
+  },
+  {
+    "simaxme/java.nvim",
+    ft = { "java" },
   },
 
+  -- override plugin configs
+  -- {
+  --   "williamboman/mason.nvim",
+  --   opts = overrides.mason,
+  -- },
+  --
   {
     "nvim-treesitter/nvim-treesitter",
     opts = overrides.treesitter,
@@ -73,7 +83,7 @@ return {
     "nvim-tree/nvim-tree.lua",
     opts = overrides.nvimtree,
   },
-
+  --
   {
     "nvim-telescope/telescope.nvim",
     dependencies = {
@@ -336,47 +346,47 @@ return {
       { "<leader>u", "<cmd>UndotreeToggle<cr>", desc = "Undotree Toggle" },
     },
   },
-  {
-    "folke/which-key.nvim",
-    config = function(_, opts)
-      dofile(vim.g.base46_cache .. "whichkey")
-      require("which-key").setup(opts)
-      local present, wk = pcall(require, "which-key")
-      if not present then
-        return
-      end
-      wk.register {
-        -- add group
-        ["<leader>"] = {
-          f = { name = "+Find" },
-          l = { name = "+LSP" },
-          g = { name = "+Git" },
-          c = { name = "+Code" },
-          r = { name = "+Refactor" },
-          s = { name = "+System" },
-          t = { name = "+Test" },
-          x = { name = "+Diagnostics" },
-          u = { name = "+UI" },
-        },
-      }
-      wk.register {
-        -- add group
-        ["<leader>c"] = {
-          r = { name = "+Run" },
-        },
-      }
-      wk.register {
-        -- add group
-        ["<leader>g"] = {
-          d = { name = "+Diff" },
-          h = { name = "+Hunk" },
-        },
-      }
-    end,
-    setup = function()
-      require("core.utils").load_mappings "whichkey"
-    end,
-  },
+  -- {
+  --   "folke/which-key.nvim",
+  --   config = function(_, opts)
+  --     dofile(vim.g.base46_cache .. "whichkey")
+  --     require("which-key").setup(opts)
+  --     local present, wk = pcall(require, "which-key")
+  --     if not present then
+  --       return
+  --     end
+  --     wk.register {
+  --       -- add group
+  --       ["<leader>"] = {
+  --         f = { name = "+Find" },
+  --         l = { name = "+LSP" },
+  --         g = { name = "+Git" },
+  --         c = { name = "+Code" },
+  --         r = { name = "+Refactor" },
+  --         s = { name = "+System" },
+  --         t = { name = "+Test" },
+  --         x = { name = "+Diagnostics" },
+  --         u = { name = "+UI" },
+  --       },
+  --     }
+  --     wk.register {
+  --       -- add group
+  --       ["<leader>c"] = {
+  --         r = { name = "+Run" },
+  --       },
+  --     }
+  --     wk.register {
+  --       -- add group
+  --       ["<leader>g"] = {
+  --         d = { name = "+Diff" },
+  --         h = { name = "+Hunk" },
+  --       },
+  --     }
+  --   end,
+  --   setup = function()
+  --     require("core.utils").load_mappings "whichkey"
+  --   end,
+  -- },
 
   -- copilot
   {
@@ -518,5 +528,3 @@ return {
   { "kdheepak/lazygit.nvim", event = "VeryLazy", cmd = "LazyGit" },
   { "mvllow/modes.nvim", event = "VeryLazy", opts = overrides.modes },
 }
-
-

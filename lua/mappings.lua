@@ -27,7 +27,7 @@ map("n", "vv", "V", NS)
 map("n", "<leader>q", ":q!<CR>", NS)  -- quit without saving
 -- map("n", "<localleader>w", ":w<CR>", NS)           -- save
 -- map("n", "<localleader>q", ":Bdelete<CR>", NS)     -- close buffer
-map("n", "W", ":w<CR>", NS)           -- save
+map("n", "W", ":w!<CR>", NS)           -- save
 map("v", "y", "myy`y", NS)     -- close buffer
 
   map("n", "q", function()
@@ -38,7 +38,7 @@ map("v", "y", "myy`y", NS)     -- close buffer
 map("n", "H", ":BufferLineCyclePrev<cr>", NS)
 map("n", "L", ":BufferLineCycleNext<cr>", NS)
 map("n", "<leader>bb", ":e #<cr>", NS)
-map("n", "<localleader><Space>", ":Telescope buffers<cr>", NS)
+map("n", "<leader><Space>", ":Telescope buffers<cr>", NS)
 
 
 -- Split window management
@@ -92,7 +92,7 @@ map("n", "<leader>fk", builtin.keymaps, { desc = "Find keymap" })
 map("n", "<leader>fs", builtin.current_buffer_fuzzy_find, { desc = "Search in buffer" })
 map("n", "<leader>fo", builtin.lsp_document_symbols, { desc = "Document symbols" })
 map("n", "<leader>fi", builtin.lsp_incoming_calls, { desc = "Incoming calls" })
-map("n", "<leader>fm", function() builtin.treesitter({ default_text = ":method:" }) end, { desc = "Find methods" })
+map("n", "<leader>fM", function() builtin.treesitter({ default_text = ":method:" }) end, { desc = "Find methods" })
 
 -- Git-blame
 -- map("n", "<leader>gb", ":GitBlameToggle<CR>") -- toggle git blame
@@ -126,7 +126,7 @@ map("n", "<leader>lr", ":LspReset<cr>", { desc = "LSP Reset" })
 -- map("n", "gK", function() vim.lsp.buf.signature_help() end, { desc = "Signature help" })
 -- map("n", "<leader>rn", function() vim.lsp.buf.rename() end, { desc = "Rename Buffer" })
 -- map('n', 'gq', '<cmd>lua vim.lsp.buf.format({async = true})<CR>', { desc = "format buffer"})
--- map({ 'n', 'v' }, 'gq', function() require("conform").format({ async = true, lsp_format = "fallback" }) end, { desc = "Format"})
+map({ 'n', 'v' }, '<leader>cf', function() require("conform").format({ async = true, lsp_format = "fallback" }) end, { desc = "Format"})
 -- map('n', '<leader>xc', '<cmd>lua vim.lsp.buf.code_action()<CR>', { desc = "Code Action"})
 -- map('n', '<leader>xx', '<cmd>lua vim.diagnostic.open_float()<CR>', { desc = "Open Float"})
 -- map("n", "gk", function() vim.diagnostic.goto_prev() end, { desc = "Previous Diagnostic" })

@@ -1,83 +1,83 @@
--- local on_attach = require("plugins.configs.lspconfig").on_attach
--- local capabilities = require("plugins.configs.lspconfig").capabilities
-local capabilities = require("cmp_nvim_lsp").default_capabilities()
+-- Load NvChad's LSP theme and diagnostic config
+dofile(vim.g.base46_cache .. "lsp")
+require("nvchad.lsp").diagnostic_config()
 
----@diagnostic disable-next-line: different-requires
-local lspconfig = vim.lsp.config()
+-- Setup keymaps on LspAttach (from NvChad but without disabling semantic tokens)
+vim.api.nvim_create_autocmd("LspAttach", {
+  callback = function(args)
+    local bufnr = args.buf
+    local client = vim.lsp.get_client_by_id(args.data.client_id)
 
--- if you just want default config for the servers then put them in a table
+    local function opts(desc)
+      return { buffer = bufnr, desc = "LSP " .. desc }
+    end
+
+    local map = vim.keymap.set
+    map("n", "gD", vim.lsp.buf.declaration, opts "Go to declaration")
+    map("n", "gd", vim.lsp.buf.definition, opts "Go to definition")
+    map("n", "gi", vim.lsp.buf.implementation, opts "Go to implementation")
+    map("n", "gr", vim.lsp.buf.references, opts "Show references")
+    map("n", "K", vim.lsp.buf.hover, opts "Hover documentation")
+    map("n", "<leader>wa", vim.lsp.buf.add_workspace_folder, opts "Add workspace folder")
+    map("n", "<leader>wr", vim.lsp.buf.remove_workspace_folder, opts "Remove workspace folder")
+    map("n", "<leader>wl", function()
+      print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
+    end, opts "List workspace folders")
+    map("n", "<leader>D", vim.lsp.buf.type_definition, opts "Go to type definition")
+    map("n", "<leader>ra", vim.lsp.buf.rename, opts "Rename")
+    map("n", "<leader>ca", vim.lsp.buf.code_action, opts "Code action")
+    map("i", "<C-k>", vim.lsp.buf.signature_help, opts "Signature help")
+
+    -- Enable semantic tokens if supported (NOT disabled like NvChad default)
+    if client and client.server_capabilities.semanticTokensProvider then
+      vim.lsp.semantic_tokens.start(bufnr, args.data.client_id)
+    end
+  end,
+})
+
+-- Basic servers
 local servers = {
   "html",
   "cssls",
+  "ts_ls",
   "clangd",
+  -- "rust_analyzer",
+  "pyright",
+  "yamlls",
+  "jsonls",
+  "dockerls",
+  "vimls",
+  -- Web development
+  "tailwindcss",     -- Tailwind CSS
+  "eslint",          -- ESLint
+  -- "emmet_ls",        -- Emmet (HTML/CSS snippets)
+  -- Kubernetes
+  "helm_ls",         -- Helm charts
 }
 
-for _, lsp in ipairs(servers) do
-  lspconfig[lsp].setup {
-    on_attach = on_attach,
-    capabilities = capabilities,
-  }
-end
+vim.lsp.enable(servers)
 
-lspconfig.tsserver.setup {
-  on_attach = on_attach,
-  capabilities = capabilities,
-  init_options = {
-    preferences = {
-      -- importModuleSpecifierPreference = "relative",
-      disableSuggestions = true,
-    },
-  },
-}
-
-lspconfig.eslint.setup {
+-- YAML with Kubernetes schema validation
+vim.lsp.config("yamlls", {
   settings = {
-    codeAction = {
-      disableRuleComment = { enable = true },
-    },
-  },
-  on_attach = on_attach,
-  capabilities = capabilities,
-}
-
-lspconfig.pyright.setup {
-  on_attach = on_attach,
-  capabilities = capabilities,
-  settings = {
-    python = {
-      analysis = {
-        autoSearchPaths = true,
-        diagnosticSeverityOverrides = {
-          reportMissingImports = "information",
-        },
+    yaml = {
+      schemas = {
+        kubernetes = "*.yaml",
+        ["http://json.schemastore.org/github-workflow"] = ".github/workflows/*",
+        ["http://json.schemastore.org/github-action"] = ".github/action.{yml,yaml}",
+        ["http://json.schemastore.org/kustomization"] = "kustomization.{yml,yaml}",
+        ["http://json.schemastore.org/chart"] = "Chart.{yml,yaml}",
+        ["http://json.schemastore.org/taskfile"] = "Taskfile*.{yml,yaml}",
+        ["https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json"] = "*docker-compose*.{yml,yaml}",
+        ["https://raw.githubusercontent.com/argoproj/argo-workflows/master/api/jsonschema/schema.json"] = "*flow*.{yml,yaml}",
       },
+      schemaStore = {
+        enable = true,
+        url = "https://www.schemastore.org/api/json/catalog.json",
+      },
+      validate = true,
+      completion = true,
+      hover = true,
     },
   },
-}
-
-
-lspconfig.ruff_lsp.keys = {
-  {
-    "<leader>co",
-    function()
-      vim.lsp.buf.code_action({
-        apply = true,
-        context = {
-          only = { "source.organizeImports" },
-          diagnostics = {},
-        },
-      })
-    end,
-    desc = "Organize Imports",
-  },
-}
-
-lspconfig.ruff_lsp.setup {
-  capabilities = capabilities,
-  on_attach = function(client, _)
-            if client.name == "ruff_lsp" then
-              -- Disable hover in favor of Pyright
-              client.server_capabilities.hoverProvider = false
-            end
-          end,
-}
+})

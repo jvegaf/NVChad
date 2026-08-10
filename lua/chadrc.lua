@@ -21,4 +21,8 @@ M.ui = {
      }
 }
 
+M.mason = {
+  pkgs = { "tree-sitter-cli" },
+}
+
 return M
