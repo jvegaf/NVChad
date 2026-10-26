@@ -24,47 +24,47 @@ M.treesitter = {
   },
 }
 
--- M.mason = {
---   ensure_installed = {
---     -- lua stuff
---     "lua-language-server",
---     "stylua",
---
---     -- web dev stuff
---     "css-lsp",
---     "html-lsp",
---     "typescript-language-server",
---     "eslint-lsp",
---     "prettier",
---
---     -- c/cpp stuff
---     "clangd",
---     "clang-format",
---
---     --java
---     "jdtls",
---     "lemminx",
---
---     --python
---     "pyright",
---     "ruff-lsp",
---     "ruff",
---
---     "stylelint-lsp",
---     "jsonlint",
---     "json-lsp",
---     "hadolint",
---     "shellcheck",
---
---     "js-debug-adapter",
---     "java-debug-adapter",
---     "java-test",
---     "checkstyle",
---
---     "codelldb",
---     "rust-analyzer",
---   },
--- }
+M.mason = {
+  ensure_installed = {
+    -- lua stuff
+    "lua-language-server",
+    "stylua",
+
+    -- web dev stuff
+    "css-lsp",
+    "html-lsp",
+    "typescript-language-server",
+    "eslint-lsp",
+    "prettier",
+
+    -- c/cpp stuff
+    "clangd",
+    "clang-format",
+
+    --java
+    -- "jdtls",
+    -- "lemminx",
+
+    --python
+    "pyright",
+    "ruff-lsp",
+    "ruff",
+
+    "stylelint-lsp",
+    "jsonlint",
+    "json-lsp",
+    "hadolint",
+    "shellcheck",
+
+    "js-debug-adapter",
+    -- "java-debug-adapter",
+    -- "java-test",
+    -- "checkstyle",
+
+    "codelldb",
+    "rust-analyzer",
+  },
+}
 
 local api = require "nvim-tree.api"
 api.events.subscribe(api.events.Event.FileCreated, function(file)

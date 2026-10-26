@@ -52,7 +52,7 @@ local servers = {
   "eslint",          -- ESLint
   -- "emmet_ls",        -- Emmet (HTML/CSS snippets)
   -- Kubernetes
-  "helm_ls",         -- Helm charts
+  -- "helm_ls",         -- Helm charts
 }
 
 vim.lsp.enable(servers)
