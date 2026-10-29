@@ -1,3 +1,4 @@
+-- stylua: ignore
 local overrides = require "configs.overrides"
 
 return {
@@ -33,16 +34,6 @@ return {
   --   config = function()
   --     require "configs.nvim-lint"
   --   end,
-  -- },
-  -- {
-  --   "neovim/nvim-lspconfig",
-  --   dependencies = {
-  --     "hrsh7th/cmp-nvim-lsp",
-  --   },
-  --   config = function()
-  --     -- require "plugins.configs.lspconfig"
-  --     require "configs.lspconfig"
-  --   end, -- Override to setup mason-lspconfig
   -- },
   -- jdtls
   -- {
@@ -95,14 +86,8 @@ return {
         dependencies = {
           "junegunn/fzf.vim",
           dependencies = {
-            {
-              "tpope/vim-dispatch",
-              cmd = { "Make", "Dispatch" },
-            },
-            {
-              "junegunn/fzf",
-              build = ":call fzf#install()",
-            },
+            { "tpope/vim-dispatch", cmd = { "Make", "Dispatch" } },
+            { "junegunn/fzf", build = ":call fzf#install()" },
           },
         },
       },
@@ -140,15 +125,15 @@ return {
     },
   },
   {
-    "jvegaf/browse.nvim",
+    "lalitmee/browse.nvim",
     dependencies = {
       "nvim-telescope/telescope.nvim",
     },
     event = "VeryLazy",
     keys = {
-      { "<A-s>", "<cmd>VisualSearch<cr>", mode = "v", desc = "Search on web" },
-      { "<leader>s", "<cmd>VisualBookmarks<cr>", mode = "v", desc = "Search on web bookmarks" },
-      { "<leader>i", "<cmd>InputSearch<cr>", desc = "Search on web bookmarks" },
+      { '<leader>ff', '<cmd>VisualSearch<cr>', mode = 'v', desc = 'Search on web' },
+      { '<leader>fb', '<cmd>VisualBookmarks<cr>', mode = 'v', desc = 'Search on web bookmarks' },
+      { '<leader>si', '<cmd>InputSearch<cr>', desc = 'Search on web' },
     },
     config = function()
       require("configs.browse")
@@ -156,17 +141,34 @@ return {
   },
 
   {
-    "sontungexpt/url-open",
-    cmd = "URLOpenUnderCursor",
+    'sontungexpt/url-open',
+    event = 'VeryLazy',
+    cmd = 'URLOpenUnderCursor',
     config = function()
-      local status_ok, url_open = pcall(require, "url-open")
+      local status_ok, url_open = pcall(require, 'url-open')
       if not status_ok then
         return
       end
-      url_open.setup {}
+      url_open.setup({})
 
-      vim.keymap.set("n", "gx", "<esc>:URLOpenUnderCursor<cr>")
+      vim.keymap.set('n', 'gx', '<esc>:URLOpenUnderCursor<cr>')
     end,
+  },
+  -- urlview
+  {
+    'axieax/urlview.nvim',
+    cmd = { 'UrlView' },
+    keys = {
+      { '<leader>bu', '<cmd>UrlView buffer<cr>', desc = 'urlview: buffers' },
+      { '<leader>zu', '<cmd>UrlView lazy<cr>', desc = 'urlview: lazy' },
+      { '<leader>bU', '<cmd>UrlView buffer action=clipboard<cr>', desc = 'urlview: copy links' },
+    },
+    opts = {
+      default_title = 'Links:',
+      default_picker = 'native',
+      default_prefix = 'https://',
+      default_action = 'system',
+    },
   },
   {
     "ThePrimeagen/refactoring.nvim",
@@ -177,36 +179,12 @@ return {
     },
     keys = {
       { "<leader>rr", "<cmd>lua require('refactoring').select_refactor()<cr>", mode = { "n", "x" }, desc = "Refactor" },
-      {
-        "<leader>re",
-        "<cmd>lua require('refactoring').refactor('Extract Function')<cr>",
-        mode = { "x" },
-        desc = "Extract Function",
-      },
-      {
-        "<leader>rf",
-        "<cmd>lua require('refactoring').refactor('Extract Function To File')<cr>",
-        mode = { "x" },
-        desc = "Extract Function to file",
-      },
-      {
-        "<leader>rv",
-        "<cmd>lua require('refactoring').refactor('Extract Variable')<cr>",
-        mode = { "x" },
-        desc = "Extract Variable",
-      },
-      {
-        "<leader>ri",
-        "<cmd>lua require('refactoring').refactor('Inline Variable')<cr>",
-        mode = { "n", "x" },
-        desc = "Inline Variable",
-      },
+      { "<leader>re", "<cmd>lua require('refactoring').refactor('Extract Function')<cr>", mode = { "x" }, desc = "Extract Function" },
+      { "<leader>rf", "<cmd>lua require('refactoring').refactor('Extract Function To File')<cr>", mode = { "x" }, desc = "Extract Function to file" },
+      { "<leader>rv", "<cmd>lua require('refactoring').refactor('Extract Variable')<cr>", mode = { "x" }, desc = "Extract Variable" },
+      { "<leader>ri", "<cmd>lua require('refactoring').refactor('Inline Variable')<cr>", mode = { "n", "x" }, desc = "Inline Variable" },
       { "<leader>rb", "<cmd>lua require('refactoring').refactor('Extract Block')<cr>", desc = "Extract Block" },
-      {
-        "<leader>rbf",
-        "<cmd>lua require('refactoring').refactor('Extract Block To File')<cr>",
-        desc = "Extract Block to file",
-      },
+      { "<leader>rbf", "<cmd>lua require('refactoring').refactor('Extract Block To File')<cr>", desc = "Extract Block to file" },
     },
     config = function()
       require("refactoring").setup {}
@@ -217,7 +195,10 @@ return {
     "Wansmer/treesj",
     keys = { { "<leader>m", "<CMD>TSJToggle<CR>", desc = "Toggle Split Join" } },
     cmd = { "TSJToggle", "TSJSplit", "TSJJoin" },
-    opts = { use_default_keymaps = false },
+    opts = {
+      use_default_keymaps = false,
+      max_join_length = 200,
+    },
   },
   {
     "mg979/vim-visual-multi",
@@ -246,31 +227,12 @@ return {
       { "<leader>xX", "<cmd>TroubleToggle workspace_diagnostics<cr>", desc = "Workspace Diagnostics (Trouble)" },
       { "<leader>xL", "<cmd>TroubleToggle loclist<cr>", desc = "Location List (Trouble)" },
       { "<leader>xs", "<cmd>TroubleToggle quickfix<cr>", desc = "Quickfix List (Trouble)" },
-      {
-        "[q",
-        function()
-          if require("trouble").is_open() then
-            require("trouble").previous { skip_groups = true, jump = true }
-          else
-            vim.cmd.cprev()
-          end
-        end,
-        desc = "Previous trouble/quickfix item",
-      },
-      {
-        "]q",
-        function()
-          if require("trouble").is_open() then
-            require("trouble").next { skip_groups = true, jump = true }
-          else
-            vim.cmd.cnext()
-          end
-        end,
-        desc = "Next trouble/quickfix item",
-      },
+      { "[q", function() if require("trouble").is_open() then require("trouble").previous { skip_groups = true, jump = true } else vim.cmd.cprev() end end, desc = "Previous trouble/quickfix item" },
+      { "]q", function() if require("trouble").is_open() then require("trouble").next { skip_groups = true, jump = true } else vim.cmd.cnext() end end, desc = "Next trouble/quickfix item" },
     },
   },
 
+  -- ufo
   {
     "kevinhwang91/nvim-ufo",
     dependencies = "kevinhwang91/promise-async",
@@ -279,11 +241,13 @@ return {
       require "configs.nvim-ufo"
     end,
   },
+  -- EasyAlign
   {
     "junegunn/vim-easy-align",
     event = "User BufReadPre",
     keys = { { "ga", "<Plug>(EasyAlign)", mode = { "n", "x" }, desc = "EasyAlign" } },
   },
+  -- undotree
   {
     "mbbill/undotree",
     event = "VeryLazy",
@@ -333,24 +297,62 @@ return {
   --     require("core.utils").load_mappings "whichkey"
   --   end,
   -- },
+  -- splits
+{
+  'smart-splits-nvim/smart-splits.nvim',
+  version = '^3.0.0',
+  dependencies = {
+    { 'smart-splits-nvim/backend-tmux', main = 'smart-splits-backend-tmux' },
+    { 'smart-splits-nvim/backend-zellij-lua', main = 'smart-splits-backend-zellij-lua' },
+    {
+      'adriankarlen/smart-splits-backend-herdr',
+      main = 'smart-splits-backend-herdr',
+      opts = {}, -- see Options
+    },
+  },
+  opts = {
+    mux = { backend = { 'smart-splits-backend-tmux', 'smart-splits-backend-herdr', 'smart-splits-backend-zellij-lua' } },
+    -- Match tmux's @smart-splits_at_edge 'wrap' setting
+    move = { at_edge = 'wrap' },
+    resize = { at_edge = 'wrap' },
+  },
+  keys = {
+    -- Resize splits
+    { '<C-Left>', function() require('smart-splits').resize_left() end, desc = 'Resize left' },
+    { '<C-Down>', function() require('smart-splits').resize_down() end, desc = 'Resize down' },
+    { '<C-Up>', function() require('smart-splits').resize_up() end, desc = 'Resize up' },
+    { '<C-Right>', function() require('smart-splits').resize_right() end, desc = 'Resize right' },
+    -- Move between splits
+    { '<C-h>', function() require('smart-splits').move_cursor_left() end, desc = 'Move left' },
+    { '<C-j>', function() require('smart-splits').move_cursor_down() end, desc = 'Move down' },
+    { '<C-k>', function() require('smart-splits').move_cursor_up() end, desc = 'Move up' },
+    { '<C-l>', function() require('smart-splits').move_cursor_right() end, desc = 'Move right' },
+    -- Swap buffers
+    { '<leader><leader>h', function() require('smart-splits').swap_buf_left() end, desc = 'Swap left' },
+    { '<leader><leader>j', function() require('smart-splits').swap_buf_down() end, desc = 'Swap down' },
+    { '<leader><leader>k', function() require('smart-splits').swap_buf_up() end, desc = 'Swap up' },
+    { '<leader><leader>l', function() require('smart-splits').swap_buf_right() end, desc = 'Swap right' },
+  },
+},
 
   -- copilot
-  {
-    "zbirenbaum/copilot.lua",
-    enabled = false,
-    event = "InsertEnter",
-    opts = overrides.copilot,
-  },
+  -- {
+  --   "zbirenbaum/copilot.lua",
+  --   enabled = false,
+  --   event = "InsertEnter",
+  --   opts = overrides.copilot,
+  -- },
+  -- cmp
   {
     "hrsh7th/nvim-cmp",
     dependencies = {
-      {
-        "zbirenbaum/copilot-cmp",
-        enabled = false,
-        config = function()
-          require("copilot_cmp").setup()
-        end,
-      },
+      -- {
+      --   "zbirenbaum/copilot-cmp",
+      --   enabled = false,
+      --   config = function()
+      --     require("copilot_cmp").setup()
+      --   end,
+      -- },
       "hrsh7th/cmp-buffer",
       "hrsh7th/cmp-calc",
       "hrsh7th/cmp-cmdline",
@@ -365,6 +367,7 @@ return {
     opts = overrides.cmp,
   },
 
+  -- dap
   {
     "mfussenegger/nvim-dap",
     dependencies = {
@@ -377,21 +380,15 @@ return {
     },
     keys = {
       { "<leader>dd", desc = "Open Debug menu" },
-      -- stylua: ignore
       { "<leader>dPt", function() require("dap-python").test_method() end, desc = "Debug Method", ft = "python" },
-      {
-        "<leader>dPc",
-        function()
-          require("dap-python").test_class()
-        end,
-        desc = "Debug Class",
-        ft = "python",
-      },
+      { "<leader>dPc", function() require("dap-python").test_class() end, desc = "Debug Class", ft = "python" },
     },
     config = function()
       require "configs.dap"
     end,
   },
+  
+  -- test
   {
     "nvim-neotest/neotest",
     dependencies = {
@@ -404,57 +401,14 @@ return {
       },
     },
     keys = {
-    -- stylua: ignore
       { "<leader>tt", function() require("neotest").run.run(vim.fn.expand "%") end, desc = "Run File" },
-      {
-        "<leader>tT",
-        function()
-          require("neotest").run.run(vim.loop.cwd())
-        end,
-        desc = "Run All Test Files",
-      },
-      {
-        "<leader>tr",
-        function()
-          require("neotest").run.run()
-        end,
-        desc = "Run Nearest",
-      },
-      {
-        "<leader>ts",
-        function()
-          require("neotest").summary.toggle()
-        end,
-        desc = "Toggle Summary",
-      },
-      {
-        "<leader>to",
-        function()
-          require("neotest").output.open { enter = true, auto_close = true }
-        end,
-        desc = "Show Output",
-      },
-      {
-        "<leader>tO",
-        function()
-          require("neotest").output_panel.toggle()
-        end,
-        desc = "Toggle Output Panel",
-      },
-      {
-        "<leader>tS",
-        function()
-          require("neotest").run.stop()
-        end,
-        desc = "Stop",
-      },
-      {
-        "<leader>td",
-        function()
-          require("neotest").run.run { strategy = "dap" }
-        end,
-        desc = "Debug Nearest",
-      },
+      { "<leader>tT", function() require("neotest").run.run(vim.loop.cwd()) end, desc = "Run All Test Files" },
+      { "<leader>tr", function() require("neotest").run.run() end, desc = "Run Nearest" },
+      { "<leader>ts", function() require("neotest").summary.toggle() end, desc = "Toggle Summary" },
+      { "<leader>to", function() require("neotest").output.open { enter = true, auto_close = true } end, desc = "Show Output" },
+      { "<leader>tO", function() require("neotest").output_panel.toggle() end, desc = "Toggle Output Panel" },
+      { "<leader>tS", function() require("neotest").run.stop() end, desc = "Stop" },
+      { "<leader>td", function() require("neotest").run.run { strategy = "dap" } end, desc = "Debug Nearest" },
     },
   },
 
@@ -470,7 +424,6 @@ return {
     event = "VeryLazy",
     config = true,
   },
-  { "CRAG666/code_runner.nvim", event = "VeryLazy", config = true },
   { "kdheepak/lazygit.nvim", event = "VeryLazy", cmd = "LazyGit" },
   { "mvllow/modes.nvim", event = "VeryLazy", opts = overrides.modes },
 }
