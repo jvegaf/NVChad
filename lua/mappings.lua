@@ -35,8 +35,17 @@ map("v", "y", "myy`y", NS)     -- close buffer
   end, { desc = "buffer close" })
 
 -- Buffers
-map("n", "H", ":BufferLineCyclePrev<cr>", NS)
-map("n", "L", ":BufferLineCycleNext<cr>", NS)
+  map("n", "L", function()
+    require("nvchad.tabufline").next()
+  end, { desc = "buffer goto next" })
+
+  map("n", "H", function()
+    require("nvchad.tabufline").prev()
+  end, { desc = "buffer goto prev" })
+
+  map("n", "q", function()
+    require("nvchad.tabufline").close_buffer()
+  end, { desc = "buffer close" })
 map("n", "<leader>bb", ":e #<cr>", NS)
 map("n", "<leader><Space>", ":Telescope buffers<cr>", NS)
 

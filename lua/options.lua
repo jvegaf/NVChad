@@ -8,3 +8,5 @@ o.foldenable = true
 o.foldlevel = 99
 o.foldlevelstart = 99
 o.foldmethod = 'manual'
+o.number = true
+o.relativenumber = true
